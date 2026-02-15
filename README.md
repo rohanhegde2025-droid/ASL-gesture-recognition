@@ -8,16 +8,21 @@ A real-time American Sign Language (ASL) gesture recognition system using MediaP
 
 > Show letter signs in front of your webcam and the system will predict the ASL letter in real time with a confidence score.
 
-How It Works
+---
 
+## How It Works
+
+```
 Webcam Frame → MediaPipe (extracts 21 hand landmarks) → 63 numbers → Random Forest → Predicted Letter
+```
 
-Instead of training on raw pixels, the system uses "MediaPipe" to extract 21 hand landmark coordinates (x, y, z) per frame — giving the model a structured, background-invariant representation of the hand. This makes training fast and inference robust across different cameras and lighting conditions.
+Instead of training on raw pixels, the system uses **MediaPipe** to extract 21 hand landmark coordinates (x, y, z) per frame — giving the model a structured, background-invariant representation of the hand. This makes training fast and inference robust across different cameras and lighting conditions.
 
 ---
 
 ## Project Structure
 
+```
 asl-gesture-recognition/
 ├── asl-dataset/          # Dataset folder (not tracked by git)
 │   ├── asl_dataset_small/  # Sampled dataset (700 images per class)
@@ -31,6 +36,7 @@ asl-gesture-recognition/
 │   └── inference.py          # Real-time webcam inference
 ├── requirements.txt
 └── README.md
+```
 
 ---
 
@@ -46,33 +52,35 @@ asl-gesture-recognition/
 
 ---
 
-Setup & Installation
+## Setup & Installation
 
-1. Clone the repository
-
+### 1. Clone the repository
+```bash
 git clone https://github.com/your-username/asl-gesture-recognition.git
 cd asl-gesture-recognition
+```
 
-
-2. Create a virtual environment with Python 3.10
-
+### 2. Create a virtual environment with Python 3.10
+```bash
 py -3.10 -m venv asl_env
+```
 
-
-3. Activate the virtual environment
+### 3. Activate the virtual environment
 
 On Windows (PowerShell):
-
+```bash
 asl_env\Scripts\activate
+```
 
 On Windows (Git Bash):
-
+```bash
 source asl_env/Scripts/activate
+```
 
-
-4. Install dependencies
-
+### 4. Install dependencies
+```bash
 pip install -r requirements.txt
+```
 
 ---
 
@@ -83,44 +91,50 @@ This project uses the [ASL Alphabet Dataset](https://www.kaggle.com/datasets/gra
 For faster training, only 700 images per class are sampled using `smaller_samples.py`.
 
 Download the dataset from Kaggle and place it inside:
-
+```
 asl-dataset/asl_alphabet_train/
+```
 
 ---
 
 ## Usage
 
-Step 1 — Sample the dataset (700 images per class)
-
+### Step 1 — Sample the dataset (700 images per class)
+```bash
 python smaller_samples.py
+```
 
-
-Step 2 — Extract hand landmarks
-
+### Step 2 — Extract hand landmarks
+```bash
 python src/extract_landmarks.py
+```
+This runs MediaPipe on every image and saves a `landmarks.csv` file with 63 normalized landmark values per image.
 
-
-Step 3 — Train the model
-
+### Step 3 — Train the model
+```bash
 python src/train.py
+```
+Trains a Random Forest classifier on the extracted landmarks. Typical accuracy: **93–97%** on test data. Model is saved to `models/`.
 
-Trains a Random Forest classifier on the extracted landmarks. Typical accuracy: "93–97%" on test data. Model is saved to `models/`.
-
-Step 4 — Run real-time webcam inference
-
+### Step 4 — Run real-time webcam inference
+```bash
 python src/inference.py
-
+```
 Opens your webcam. Show an ASL letter sign and the predicted letter appears on screen with a confidence score. Press `Q` to quit.
 
 ---
 
 ## Classes Supported
 
+```
 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z + del + space + nothing
+```
 
 > Note: J and Z involve motion gestures and may have lower accuracy with a static landmark approach.
 
-Key Design Decisions
+---
+
+## Key Design Decisions
 
 **Why MediaPipe landmarks instead of raw images?**
 Training a CNN on raw images requires large datasets, long training times, and struggles to generalize across different cameras and backgrounds. MediaPipe extracts structured hand geometry (where each finger joint is) which is camera and background agnostic — making training fast and inference robust.
@@ -149,3 +163,14 @@ Landmark coordinates are normalized relative to the wrist (landmark 0) before tr
 - J and Z require motion and are harder to classify with static landmarks
 - Performance may vary under poor lighting conditions
 - Currently supports single hand detection only
+
+---
+
+## Future Improvements
+
+- Add support for dynamic gestures (J, Z) using sequence models (LSTM)
+- Build a word accumulator that strings letters into words
+- Collect personal webcam data to fine-tune for individual hand shapes
+- Add a Keras MLP for potentially higher accuracy
+
+---
