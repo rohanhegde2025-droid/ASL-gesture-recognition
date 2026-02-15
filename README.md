@@ -10,6 +10,15 @@ A real-time American Sign Language (ASL) gesture recognition system using MediaP
 
 ---
 
+<img width="978" height="754" alt="image" src="https://github.com/user-attachments/assets/1eccd6f6-3575-461c-9f3a-74f6182cd729" />
+<img width="1600" height="890" alt="image" src="https://github.com/user-attachments/assets/28d734ce-d2ef-4c5a-87cc-5509153937a7" />
+<img width="1600" height="896" alt="image" src="https://github.com/user-attachments/assets/6068f435-7097-47f6-857b-288a75664806" />
+<img width="1600" height="926" alt="image" src="https://github.com/user-attachments/assets/83b7e3b8-9e92-47a7-9f17-e4d19d5e4233" />
+
+
+
+
+
 ## How It Works
 
 ```
